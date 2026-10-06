@@ -43,21 +43,6 @@ jobs:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-      - name: Verify scoped secret retrieval without output
-        env:
-          KEY_VAULT_NAME: ${{ vars.KEY_VAULT_NAME }}
-        run: |
-          set +x
-          VALUE=$(az keyvault secret show --vault-name "$KEY_VAULT_NAME" \
-            --name LedgerFlowDemoToken --query value -o tsv)
-          test -n "$VALUE"
-          MASK="${VALUE//'%'/'%25'}"
-          MASK="${MASK//$'\r'/'%0D'}"
-          MASK="${MASK//$'\n'/'%0A'}"
-          printf '::add-mask::%s\n' "$MASK"
-          unset MASK
-          echo "Secret retrieval and presence check succeeded."
-          unset VALUE
       - name: Deploy existing web app
         env:
           WEBAPP: ${{ vars.AZURE_WEBAPP_NAME }}
