@@ -1,0 +1,18 @@
+name: Identity negative test
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  login-only:
+    runs-on: ubuntu-latest
+    environment: identity-negative-test
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
